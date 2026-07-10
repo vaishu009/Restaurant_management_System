@@ -1,0 +1,73 @@
+:root {
+    --primary-color: #ff4d4d; /* Restaurant theme Red */
+    --secondary-color: #2c3e50;
+    --accent-color: #f1c40f;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--secondary-color);
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: #e63939;
+    border-color: #e63939;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+}
+
+.rounded-pill {
+    border-radius: 50px !important;
+}
+
+.rounded-4 {
+    border-radius: 1.5rem !important;
+}
+
+/* Custom transitions */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Sticky cart for mobile */
+@media (max-width: 768px) {
+    .container {
+        padding-bottom: 80px;
+    }
+}

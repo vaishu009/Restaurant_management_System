@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice - Tasty Bites</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .invoice-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        @media print {
+            .no-print { display: none; }
+            .invoice-box { box-shadow: none; padding: 0; }
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <div class="invoice-box">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold text-primary">Tasty Bites</h2>
+                        <p class="text-muted mb-0">Order #{{ order.order_id }}</p>
+                        <p class="text-muted small">{{ order.order_date }}</p>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <h6 class="text-muted text-uppercase small fw-bold">Billed To</h6>
+                            <p class="fw-bold mb-0">{{ order.customer_name }}</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <h6 class="text-muted text-uppercase small fw-bold">Payment Method</h6>
+                            <p class="fw-bold mb-0">{{ order.payment_method }}</p>
+                        </div>
+                    </div>
+
+                    <table class="table table-borderless">
+                        <thead class="border-bottom">
+                            <tr>
+                                <th class="text-muted small">ITEM</th>
+                                <th class="text-center text-muted small">QTY</th>
+                                <th class="text-end text-muted small">PRICE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td>{{ item.item_name }}</td>
+                                <td class="text-center">{{ item.quantity }}</td>
+                                <td class="text-end">₹{{ item.subtotal }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot class="border-top">
+                            <tr>
+                                <td colspan="2" class="fw-bold fs-5">Total</td>
+                                <td class="text-end fw-bold fs-5 text-primary">₹{{ order.amount }}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <div class="text-center mt-5">
+                        <p class="text-muted mb-4">Thank you for dining with us!</p>
+                        <div class="no-print">
+                            <button onclick="window.print()" class="btn btn-outline-primary rounded-pill me-2">Print Bill</button>
+                            <a href="{{ url_for('index') }}" class="btn btn-primary rounded-pill px-4">Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

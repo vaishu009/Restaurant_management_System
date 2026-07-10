@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Tables - QR Codes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .qr-card {
+            transition: transform 0.3s;
+            border: none;
+            border-radius: 15px;
+        }
+        .qr-card:hover {
+            transform: translateY(-10px);
+        }
+        .qr-code-img {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">Tasty Bites</a>
+            <div class="ms-auto">
+                <a href="/" class="btn btn-outline-light btn-sm">Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Table QR Codes</h2>
+            <p class="text-muted">Print these QR codes and place them on the respective tables.</p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for table in tables %}
+            <div class="col">
+                <div class="card h-100 shadow-sm text-center p-4 qr-card">
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold mb-3">Table {{ table.table_number }}</h4>
+                        <div class="d-flex justify-content-center">
+                            <img src="{{ table.qr_image_url }}" alt="QR Code for Table {{ table.table_number }}" class="qr-code-img shadow-sm border p-2 bg-white">
+                        </div>
+                        <p class="small text-muted mb-3">Scan to View Menu</p>
+                        <a href="{{ table.url }}" class="btn btn-primary btn-sm rounded-pill w-100">Test Link</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Tasty Bites Restaurant Management System</p>
+        </div>
+    </footer>
+</body>
+</html>
