@@ -3,9 +3,10 @@ import mysql.connector
 from datetime import datetime
 import random
 import socket
+import os
 
 app = Flask(__name__)
-app.secret_key = 'restaurant_secret_key'
+app.secret_key = os.environ.get('SECRET_KEY', 'restaurant_secret_key')
 
 # Function to get local IP address
 def get_local_ip():
@@ -20,10 +21,11 @@ def get_local_ip():
 
 # MySQL Configuration
 db_config = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'Vaishu@123', # Updated with user provided password
-    'database': 'restaurant_management'
+    'host': os.environ.get('DB_HOST', 'localhost'),
+    'user': os.environ.get('DB_USER', 'root'),
+    'password': os.environ.get('DB_PASSWORD', 'Vaishu@123'),
+    'database': os.environ.get('DB_NAME', 'restaurant_management'),
+    'port': int(os.environ.get('DB_PORT', '3306'))
 }
 
 def get_db_connection():

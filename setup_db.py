@@ -1,3 +1,4 @@
+
 import mysql.connector
 import os
 from dotenv import load_dotenv
@@ -16,58 +17,54 @@ def setup_database():
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
 
-        # Create database if not exists (though Railway already created it)
-        # Instead, let's just use the existing DB from env var
-        database_name = os.getenv('DB_NAME', 'restaurant_management')
-        cursor.execute(f'USE {database_name}')
+        # Create database
+        print("Creating database 'restaurant_management' if it doesn't exist...")
+        cursor.execute("CREATE DATABASE IF NOT EXISTS restaurant_management")
+        cursor.execute("USE restaurant_management")
 
         # Clear only master data to avoid duplicates while preserving history
-        print('Cleaning up master data (Menu, Categories)...')
-        cursor.execute('SET FOREIGN_KEY_CHECKS = 0')
+        print("Cleaning up master data (Menu, Categories)...")
+        cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
         # We do NOT truncate Orders, Payments, or Customers to preserve history
         tables_to_refresh = ['Menu_Items', 'Categories', 'Restaurant_Tables']
         for table in tables_to_refresh:
-            try:
-                cursor.execute(f'TRUNCATE TABLE {table}')
-            except:
-                pass  # Ignore if table doesn't exist yet
-        cursor.execute('SET FOREIGN_KEY_CHECKS = 1')
+            cursor.execute(f"TRUNCATE TABLE {table}")
+        cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
 
         # Read and execute Tables.sql
-        print('Creating tables...')
+        print("Creating tables...")
         with open('Tables.sql', 'r') as f:
             sql_commands = f.read().split(';')
             for command in sql_commands:
-                command = command.strip()
-                if command and not command.startswith('use') and not command.startswith('select'):
+                if command.strip() and not command.strip().startswith('use') and not command.strip().startswith('select'):
                     try:
                         cursor.execute(command)
                     except mysql.connector.Error as err:
-                        if 'already exists' in str(err):
+                        if "already exists" in str(err):
                             continue
-                        print(f'Error executing command: {err}')
+                        print(f"Error executing command: {err}")
 
         # Read and execute insert_data.sql
-        print('Inserting sample data...')
+        print("Inserting sample data...")
         with open('insert_data.sql', 'r') as f:
             sql_commands = f.read().split(';')
             for command in sql_commands:
-                command = command.strip()
-                if command and not command.startswith('use'):
+                if command.strip() and not command.strip().startswith('use'):
                     try:
                         cursor.execute(command)
                     except mysql.connector.Error as err:
-                        if 'Duplicate entry' in str(err):
+                        if "Duplicate entry" in str(err):
                             continue
-                        print(f'Error executing command: {err}')
+                        print(f"Error executing command: {err}")
 
         conn.commit()
-        print('Database setup completed successfully!')
+        print("Database setup completed successfully!")
         
         cursor.close()
         conn.close()
     except mysql.connector.Error as err:
-        print(f'Error: {err}')
+        print(f"Error: {err}")
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     setup_database()
+
